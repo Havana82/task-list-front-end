@@ -52,13 +52,19 @@ const App = () => {
     });
     setTaskData(completed);
   };
+  const deleteTask = (id) =>{
+    const newTaskList = taskData.filter((ele) => ele.id != id);
+    setTaskData(newTaskList);
+  };
+
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={taskData} onComplete = {onComplete} /></div>
+        <div><TaskList tasks={taskData} onComplete = {onComplete} taskDelete = {deleteTask}/></div>
         <div><AddTask/></div>
         <div><TaskButton/></div>
       </main>

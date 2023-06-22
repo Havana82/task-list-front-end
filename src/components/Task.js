@@ -9,16 +9,17 @@ const Task = (props) => {
     <li className="tasks__item">
       <button onClick={()=> props.taskFunct(props.id)} 
       className={`tasks__item__toggle ${buttonClass}`}>{props.title}</button>
-      <button className="tasks__item__remove button">x</button>
+      <button className="tasks__item__remove button" onClick={()=> props.onDelete(props.id)}>x</button>
     </li>
   );
 };
 
 Task.propTypes = {
   id: PropTypes.number.isRequired,
- isComplete: PropTypes.bool.isRequired,
- title: PropTypes.string.isRequired,
-  taskFunct:PropTypes.func.isRequired
+  isComplete: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  taskFunct:PropTypes.func.isRequired,
+  onDelete: PropTypes.func
 };
 
 export default Task;
