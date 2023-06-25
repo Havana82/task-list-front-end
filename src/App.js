@@ -46,6 +46,7 @@ const toComplete = (id) => {
       });};
   
 const toInComplete = (id) => {
+   
     return axios
       .patch(`${kBaseUrl}/tasks/${id}/mark_incomplete`)
       .then(response=>{
@@ -54,7 +55,16 @@ const toInComplete = (id) => {
       .catch((error)=>{
           console.log(error);
       });};
-
+const toDelete = (id) =>{
+  return axios
+    .delete(`${kBaseUrl}/tasks/${id}`)
+    .then(response=>{
+      console.log(response.data);
+    })
+    .catch((error)=>{
+      console.log(error);
+    });
+}
   const onComplete=(id)=>{
     toComplete(id)
       .then((updatedTask)=>{
@@ -80,8 +90,11 @@ const toInComplete = (id) => {
   });
 };
   const deleteTask = (id) =>{
+    toDelete(id)
+    .then(res =>{
     const newTaskList = taskData.filter((ele) => ele.id != id);
     setTaskData(newTaskList);
+    });
   };
 
   
