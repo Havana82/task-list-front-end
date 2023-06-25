@@ -18,38 +18,6 @@ const getAllTasks = () => {
     });
 };
 
-// const TASKS = [
-//   {
-//     id: 1,
-//     title: 'Mow the lawn',
-//     isComplete: false,
-//   },
-//   {
-//     id: 2,
-//     title: 'Cook Pasta',
-//     isComplete: true,
-//   },
-//   {
-//     id: 3,
-//     title: 'Do Laundry',
-//     isComplete: true,
-//   },
-//   {
-//     id: 4,
-//     title: 'Go Shopping',
-//     isComplete: false,
-//   },
-//   {
-//     id: 5,
-//     title: 'Clean House',
-//     isComplete: false,
-//   },
-//   {
-//     id: 6,
-//     title: 'Walk Dog',
-//     isComplete: true,
-//   },
-// ];
 
 const App = () => {
 
@@ -62,27 +30,48 @@ const App = () => {
 
       );
   };
+  useEffect(()=>{
+    fetchTasks();
+  }, []);
 
 
+  const toComplete = (id) => {
+     return axios
+      .patch(`${kBaseUrl}/tasks/${id}/mark_complete`)
+      .then(response=>{
+        return response.data;
+      })
+      .catch((error)=>{
+        console.log(error);
+      });};
+    // const completed = taskData.map((task)=>{
+    //   if(task.id === id){
+    //     return {...task, isComplete: !task.isComplete};
+    //   } else {
+    //     return task;
+    //   }
+    // });
+    // setTaskData(completed);
+  // };
 
-  const onComplete = (id) => {
-    const completed = taskData.map((task)=>{
-      if(task.id === id){
-        return {...task, isComplete: !task.isComplete};
-      } else {
-        return task;
-      }
-    });
-    setTaskData(completed);
-  };
+  const onComplete=(id)=>{
+    toComplete(id)
+      .then((updatedTask)=>{
+        setTaskData((oldTasks)=> {return oldTasks.map((task)=>{
+          if(task.id===id){
+            return updatedTask;
+          }
+          return task;
+        });
+      });
+  });
+};
   const deleteTask = (id) =>{
     const newTaskList = taskData.filter((ele) => ele.id != id);
     setTaskData(newTaskList);
   };
 
-  useEffect(()=>{
-    fetchTasks();
-  }, []);
+  
   return (
     <div className="App">
       <header className="App-header">

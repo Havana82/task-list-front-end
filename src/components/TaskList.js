@@ -10,7 +10,7 @@ const TaskList = (props) => {
           key={task.id}
           id={task.id}
           title={task.title}
-          isComplete={task.isComplete}
+          isComplete={task.is_complete}
           taskFunct = {props.onComplete}
           onDelete = {props.taskDelete}
         />
