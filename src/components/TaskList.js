@@ -11,7 +11,8 @@ const TaskList = (props) => {
           id={task.id}
           title={task.title}
           isComplete={task.is_complete}
-          taskFunct = {props.onComplete}
+          compFunct = {props.onComplete}
+          inCompFunct = {props.onInComplete}
           onDelete = {props.taskDelete}
         />
       );
@@ -30,7 +31,8 @@ TaskList.propTypes = {
     })
   ).isRequired,
   onComplete : PropTypes.func.isRequired,
-  taskDelete : PropTypes.func.isRequired
+  taskDelete : PropTypes.func.isRequired,
+  onInComplete: PropTypes.func
 };
 
 export default TaskList;

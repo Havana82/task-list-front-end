@@ -35,8 +35,8 @@ const App = () => {
   }, []);
 
 
-  const toComplete = (id) => {
-     return axios
+const toComplete = (id) => {
+    return axios
       .patch(`${kBaseUrl}/tasks/${id}/mark_complete`)
       .then(response=>{
         return response.data;
@@ -44,18 +44,31 @@ const App = () => {
       .catch((error)=>{
         console.log(error);
       });};
-    // const completed = taskData.map((task)=>{
-    //   if(task.id === id){
-    //     return {...task, isComplete: !task.isComplete};
-    //   } else {
-    //     return task;
-    //   }
-    // });
-    // setTaskData(completed);
-  // };
+  
+const toInComplete = (id) => {
+    return axios
+      .patch(`${kBaseUrl}/tasks/${id}/mark_incomplete`)
+      .then(response=>{
+        return response.data;
+      })
+      .catch((error)=>{
+          console.log(error);
+      });};
 
   const onComplete=(id)=>{
     toComplete(id)
+      .then((updatedTask)=>{
+        setTaskData((oldTasks)=> {return oldTasks.map((task)=>{
+          if(task.id===id){
+            return updatedTask;
+          }
+          return task;
+        });
+      });
+  });
+};
+  const onInComplete=(id)=>{
+    toInComplete(id)
       .then((updatedTask)=>{
         setTaskData((oldTasks)=> {return oldTasks.map((task)=>{
           if(task.id===id){
@@ -78,7 +91,8 @@ const App = () => {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={taskData} onComplete = {onComplete} taskDelete = {deleteTask}/></div>
+        <div><TaskList tasks={taskData} onInComplete={onInComplete}
+         onComplete = {onComplete} taskDelete = {deleteTask}/></div>
         <div><AddTask/></div>
         <div><TaskButton/></div>
       </main>
