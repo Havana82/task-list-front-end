@@ -2,7 +2,6 @@ import React from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
 import AddTask from './components/AddTask.js';
-import TaskButton from './components/TaskButton.js';
 import {useState, useEffect}  from 'react';
 import axios from 'axios';
 
@@ -18,7 +17,6 @@ const getAllTasks = () => {
     });
 };
 
-
 const App = () => {
 
   const [taskData, setTaskData]= useState([]);
@@ -32,10 +30,9 @@ const App = () => {
   };
   useEffect(()=>{
     fetchTasks();
-  }, []);
+  },[] );
 
-
-const toComplete = (id) => {
+  const toComplete = (id) => {
     return axios
       .patch(`${kBaseUrl}/tasks/${id}/mark_complete`)
       .then(response=>{
@@ -45,7 +42,7 @@ const toComplete = (id) => {
         console.log(error);
       });};
   
-const toInComplete = (id) => {
+  const toInComplete = (id) => {
    
     return axios
       .patch(`${kBaseUrl}/tasks/${id}/mark_incomplete`)
@@ -55,7 +52,7 @@ const toInComplete = (id) => {
       .catch((error)=>{
           console.log(error);
       });};
-const toDelete = (id) =>{
+  const toDelete = (id) =>{
   return axios
     .delete(`${kBaseUrl}/tasks/${id}`)
     .then(response=>{
@@ -64,9 +61,20 @@ const toDelete = (id) =>{
     .catch((error)=>{
       console.log(error);
     });
-}
-  const onComplete=(id)=>{
+  };
+const onComplete=(id)=>{
     toComplete(id)
+      // .then(res=>{
+    //     const completed = taskData.map((task)=>{
+    //       if(task.id === id){
+    //         return{...task, is_complete: true};
+    //       }else{
+    //         return task;
+    //       }
+    //     });
+    
+    //   setTaskData(completed);});
+    // };
       .then((updatedTask)=>{
         setTaskData((oldTasks)=> {return oldTasks.map((task)=>{
           if(task.id===id){
@@ -77,7 +85,7 @@ const toDelete = (id) =>{
       });
   });
 };
-  const onInComplete=(id)=>{
+const onInComplete=(id)=>{
     toInComplete(id)
       .then((updatedTask)=>{
         setTaskData((oldTasks)=> {return oldTasks.map((task)=>{
@@ -89,7 +97,7 @@ const toDelete = (id) =>{
       });
   });
 };
-  const deleteTask = (id) =>{
+const deleteTask = (id) =>{
     toDelete(id)
     .then(res =>{
     const newTaskList = taskData.filter((ele) => ele.id != id);
@@ -97,6 +105,13 @@ const toDelete = (id) =>{
     });
   };
 
+const handleSubmit = (data) =>{
+  axios.post(`${kBaseUrl}/tasks`, data)
+    .then((response)=>{
+      setTaskData((oldData)=>[...oldData, response.data.task]);
+    })
+    .catch((error)=> console.log(error));
+};
   
   return (
     <div className="App">
@@ -106,8 +121,8 @@ const toDelete = (id) =>{
       <main>
         <div><TaskList tasks={taskData} onInComplete={onInComplete}
          onComplete = {onComplete} taskDelete = {deleteTask}/></div>
-        <div><AddTask/></div>
-        <div><TaskButton/></div>
+        <div><AddTask handleSubmit={handleSubmit}/></div>
+    
       </main>
     </div>
   );
